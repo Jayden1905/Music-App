@@ -18,7 +18,7 @@ function chillHop() {
         "https://chillhop.com/wp-content/uploads/2022/05/4a42f136486d42e4d021c673540885c82a1934e6-1024x1024.jpg",
       artist: "Sleepy Fish, coa",
       audio: "https://mp3.chillhop.com/serve.php/?mp3=36925",
-      color: ["#9ecb9e", "#fcca5c"],
+      color: ["#e77418", "#fcca5c"],
       id: uuidv4(),
       active: false,
     },

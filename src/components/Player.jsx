@@ -7,8 +7,6 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { playAudio } from "../util";
-
 const useKey = (key, cb) => {
   const callbackRef = useRef(cb);
 
@@ -96,23 +94,31 @@ const Player = ({
 
   useKey("Space", playSongHandler);
 
-  const skipTrackHandler = (direction) => {
-    let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+  const skipTrackHandler = async (direction) => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
 
     if (direction === "skip-forward") {
-      setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+      await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
     }
     if (direction === "skip-back") {
       if ((currentIndex - 1) % songs.length === -1) {
-        setCurrentSong(songs[songs.length - 1]);
-        playAudio(isPlaying, audioRef);
+        await setCurrentSong(songs[songs.length - 1]);
+        if (isPlaying) audioRef.current.play();
         return;
       }
-      setCurrentSong(songs[(currentIndex - 1) % songs.length]);
+      await setCurrentSong(songs[(currentIndex - 1) % songs.length]);
     }
 
     // Check if the song is playing?
-    playAudio(isPlaying, audioRef);
+    if (isPlaying) audioRef.current.play();
+  };
+
+  const songEndHandler = async () => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+
+    await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+
+    if (isPlaying) audioRef.current.play();
   };
 
   // State
@@ -173,6 +179,7 @@ const Player = ({
         onTimeUpdate={timeUpdateHandler}
         ref={audioRef}
         src={currentSong.audio}
+        onEnded={songEndHandler}
       ></audio>
     </div>
   );
