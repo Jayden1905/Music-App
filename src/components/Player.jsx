@@ -53,6 +53,7 @@ const Player = ({
     });
     setSongs(newSongs);
   }, [currentSong]);
+
   // Event Hanlders
   const playSongHandler = () => {
     if (isPlaying) {
